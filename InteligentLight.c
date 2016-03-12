@@ -69,7 +69,7 @@ time_t date;
 //
 int TLED(){
 //Toggle LED
-LEDfile = fopen("/sys/class/gpio/gpio49/value","rw");
+LEDfile = fopen("/sys/class/gpio/gpio49/value","r");
 fscanf(LEDfile, "%d", &LED);
 //Close file
 fclose(LEDfile);
@@ -95,8 +95,21 @@ return 0;
 int LEDon(){
 //Turns LED on
 
-//Set LED state variable
+//Open LED file
+LEDfile = fopen("/sys/class/gpio/gpio49/value","w");
+
+//Set LED variable to on
 LED = 1;
+
+//Write to LED file
+fprintf(LEDfile, "%d", LED);
+
+//Close LED file
+fclose(LEDfile);
+
+//Call Ptime to print the time
+Ptime();
+
 return 0;	
 }
 
@@ -106,8 +119,21 @@ return 0;
 int LEDoff(){
 //Turns LED off
 
-//Set LED state variable
+//Open LED file
+LEDfile = fopen("/sys/class/gpio/gpio49/value","w");
+
+//Set LED variable to on
 LED = 0;
+
+//Write to LED file
+fprintf(LEDfile, "%d", LED);
+
+//Close LED file
+fclose(LEDfile);
+
+//Call Ptime to print the time
+Ptime();
+
 return 0;
 }
 
