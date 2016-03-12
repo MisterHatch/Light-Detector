@@ -33,10 +33,26 @@
 //Global Variables
 //////////////////////////////////////////////////
 
+
+//Variables for Light Sensor
+int Ain = 0;
+int AinComp = 1000;
+int SensorTrig = 0:
+FILE *Ain0;
+	
+//Variables for Button Push
+int Oldstate = 0;
+int Newstate = 0;
+int Buttonpress = 0;
+FILE *Button;
+
+//Variables for LED access
+//
 //LED state variable
 // 1 = on
 // 0 = off
 int LED = 0; 
+FILE* LEDfile;
 
 //Timing Variables
 // for time and date
@@ -53,6 +69,10 @@ time_t date;
 //
 int TLED(){
 //Toggle LED
+LEDfile = fopen("/sys/class/gpio/gpio49/value","rw");
+fscanf(LEDfile, "%d", &LED);
+//Close file
+fclose(LEDfile);
 
 //if LED is on, turn off
 if(LED == 1){
@@ -121,15 +141,7 @@ return 0;
 //Main 
 //////////////////////////////////////////////////
 int main()
-{
-	
-	//Declare Variables
-	int Ain = 0;
-	int AinComp = 1000;
-	int SensorTrig = 0:
-	FILE *Ain0;
-	
-	
+{	
 	//While loop to run program indefinately
 	while(1){
 		
@@ -168,15 +180,32 @@ int main()
 				SensorTrig=0;
 			}
 		}	
-
-//BUTTON PRESS HANDLING/////////////////////////////
-		//Check if button is pressed
-		if buttonpress
-			//If button is presed toggle LED
-			TLED();
-		
-		//Close file for Sensor Signal
 		fclose(Ain0);
+		
+//BUTTON PRESS HANDLING/////////////////////////////
+		//Open file to check newstate of button
+		Button = fopen("/sys/class/gpio/gpio115/value","r");
+		fscanf(Button,"%d",&Newstate);
+		
+		//Check if button is pressed
+		if((Oldstate==0)&(Newstate==1){
+			Buttonpress = 1;
+		}
+		
+		//Reset Oldsate variable to Newstate
+		Oldstate = Newstate;
+		
+		//If button is pressed call toggle LED
+		if(Buttonpress==1){
+			//Call toggle LED
+			TLED();
+			
+			//Reset Buttonpress variable
+			Buttonpress = 0;
+		}
+		
+		//Close file for Button
+		fclose(Button);
 	}
 
 	return 0;
